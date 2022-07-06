@@ -1,0 +1,67 @@
+class CuentaBancaria:
+    balance= 0
+    tasa_int = 0.01
+
+    def __init__(self, tasa_int, balance): 
+        self.tasa_int = tasa_int
+        self.balance = balance
+
+    def deposito(self, amount):
+        self.balance += amount
+        return self
+
+    def retiro(self, amount):
+        if CuentaBancaria.puede_retirar(self.balance,amount):
+            self.balance -= amount + 5
+        else:
+            print("Fondos insuficientes")
+        return self
+
+    def mostrar_info_cuenta(self):
+        print("Balance:", self.balance)
+        print("Con una tasa de interes de:",self.tasa_int)
+        return self
+
+    def generar_interes(self):
+        if self.balance > 0:
+            self.balance = self.balance*self.tasa_int
+        return self
+
+    @staticmethod
+    def puede_retirar(balance,amount):
+        if (balance - amount) < 0:
+            return False
+        else:
+            return True
+
+cuenta1 = CuentaBancaria(0.01,300)
+cuenta2 = CuentaBancaria(0.01,500)
+
+cuenta1.deposito(50).deposito(40).deposito(30).retiro(100).generar_interes().mostrar_info_cuenta()
+cuenta2.deposito(100).deposito(30).retiro(100).retiro(20).retiro(10).retiro(15).generar_interes().mostrar_info_cuenta()
+
+class Usuario:
+    def __init__(self, name, email,cuenta):
+        self.name = name
+        self.email = email
+        self.cuenta = CuentaBancaria(tasa_int=0.02, balance=0)	
+        
+    def hacer_deposito(self,amount):
+        self.cuenta.deposito(amount)
+        print(self.cuenta.balance)
+        return self
+    	
+    def hacer_retiro(self,amount):
+        self.cuenta.retiro(amount)
+        print(self.cuenta.balance)
+        return self
+    	
+    def mostrar_balance_usuario(self):
+        self.cuenta.mostrar_info_cuenta()
+        return self
+    	
+cuenta3 = Usuario("Andrea","@hotmail",0)
+cuenta3.hacer_deposito(100).hacer_retiro(50).mostrar_balance_usuario()
+
+otraCuenta = Usuario("Andrea","@hotmail",0)
+otraCuenta = otraCuenta.hacer_deposito(200).hacer_retiro(100).mostrar_balance_usuario()
